@@ -48,8 +48,10 @@ jobs:
 
     - name: Install Android SDK build-tools
       run: |
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
         sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
           "platform-tools" "platforms;android-34" "build-tools;37.0.0"
+
 
     - name: Install Buildozer
       run: |
