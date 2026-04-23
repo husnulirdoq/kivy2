@@ -50,9 +50,6 @@ jobs:
         sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk \
           "platform-tools" "platforms;android-34" "build-tools;37.0.0"
 
-    - name: Debug SDK install
-      run: ls -R $HOME/.buildozer/android/platform/android-sdk/build-tools
-
     - name: Install Buildozer
       run: |
         pip install buildozer
