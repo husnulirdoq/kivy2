@@ -1,0 +1,52 @@
+name: Android CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip git zip unzip openjdk-17-jdk
+        pip install buildozer cython
+
+    - name: Build APK
+      run: |
+        buildozer android debug
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: wellbeing-apk
+        path: bin/*.apk
+
+  distribute:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Set up Firebase CLI
+      run: curl -sL https://firebase.tools | bash
+
+    - name: Upload to Firebase App Distribution
+      run: |
+        firebase appdistribution:distribute bin/*.apk \
+          --app <1:308895666340:android:7e4b4a92f2ba707fd35631> \
+          --groups testers \
+          --token ${{ secrets.1//0g3Cq4rY1KZBkCgYIARAAGBASNgF-L9Ir8O-3gS7y7rsMWdzuTPAsW27Ix_u5464B1uGLpxj8Zjwuo6jesuFatD9YSHjZHL8MwA }}
