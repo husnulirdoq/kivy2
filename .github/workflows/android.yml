@@ -83,11 +83,10 @@ jobs:
         export ACLOCAL_PATH=/usr/share/aclocal
         echo "ACLOCAL_PATH=$ACLOCAL_PATH" >> $GITHUB_ENV
 
-    - name: Clean and Build APK
+    - name: Build APK
       run: |
-        # Menghapus sisa kompilasi yang gagal agar tidak bentrok dengan Cython baru
-        buildozer android clean
-        # Jalankan build dengan verbose agar kita bisa lihat detail jika ada error lagi
+        # Jangan pakai 'buildozer android clean' di sini karena foldernya belum ada
+        # Langsung jalankan build dengan verbose agar log-nya lengkap
         buildozer -v android debug
       env:
         APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
