@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "308895666340",
+    "project_id": "wellbeingtracker-537ec",
+    "storage_bucket": "wellbeingtracker-537ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308895666340:android:7e4b4a92f2ba707fd35631",
+        "android_client_info": {
+          "package_name": "org.aqib.kivy2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308895666340-a8hug3hb9is036bh3ajv8pbvmqr8lhsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpbvXVZXpO_53S0LG9qRbNN4OULCZIU7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308895666340-a8hug3hb9is036bh3ajv8pbvmqr8lhsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

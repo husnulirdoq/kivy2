@@ -1,0 +1,32 @@
+BoxLayout:
+    orientation: 'vertical'
+    padding: [30, 50, 30, 50]
+    spacing: 20
+
+    Label:
+        text: "Wellbeing Tracker"
+        font_size: '30sp'
+        color: (0.1, 0.6, 0.9, 1)  # Biru Cerah
+        bold: True
+        size_hint_y: None
+        height: '100dp'
+        padding: [10, 15]
+
+    Button:
+        text: "Catat Aktivitas"
+        size_hint_y: None
+        height: '60dp'
+        background_color: (0.2, 0.5, 0.8, 1)
+        font_size: '18sp'
+
+    Button:
+        text: "Status Kesehatan"
+        size_hint_y: None
+        height: '60dp'
+        background_color: (0.2, 0.7, 0.3, 1)
+        font_size: '18sp'
+
+    Widget:
+        # Spacer agar tombol tetap berada di atas
+        size_hint_y: 1
+        padding: (10, 15)
