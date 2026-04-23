@@ -38,9 +38,10 @@ jobs:
         unzip commandlinetools.zip
         mv cmdline-tools/* .
         rm -rf cmdline-tools
-        ls -R $ANDROID_SDK_ROOT/cmdline-tools/latest
-        which sdkmanager
-        sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
+        ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+        $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
+
 
     - name: Install Android SDK build-tools
       run: |
