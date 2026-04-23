@@ -45,6 +45,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y tar
+        which tar
+        tar --version
     
     - name: Install Android SDK build-tools
       run: |
