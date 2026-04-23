@@ -49,4 +49,5 @@ jobs:
         firebase appdistribution:distribute bin/*.apk \
           --app <1:308895666340:android:7e4b4a92f2ba707fd35631> \
           --groups testers \
-          --token ${{ secrets.1//0g3Cq4rY1KZBkCgYIARAAGBASNgF-L9Ir8O-3gS7y7rsMWdzuTPAsW27Ix_u5464B1uGLpxj8Zjwuo6jesuFatD9YSHjZHL8MwA }}
+          --token ${{ secrets.FIREBASE_TOKEN }}
+
