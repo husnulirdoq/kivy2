@@ -3,4 +3,6 @@ venv/
 bin/
 *.spec
 __pycache__/
-.DS_Store
+.DS_Storevenv/
+.buildozer/
+bin/
