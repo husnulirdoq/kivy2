@@ -39,9 +39,7 @@ jobs:
         mv cmdline-tools/* .
         rm -rf cmdline-tools
         export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
-        ls -l $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
         $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
-
 
     - name: Install Android SDK build-tools
       run: |
