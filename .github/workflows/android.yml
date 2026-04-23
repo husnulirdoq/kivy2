@@ -36,6 +36,11 @@ jobs:
         export PATH=$HOME/android-sdk/cmdline-tools/bin:$PATH
         sdkmanager --version
 
+    - name: Debug SDK path
+      run: |
+        ls -R $HOME/android-sdk/cmdline-tools
+
+
     - name: Install Android SDK build-tools
       run: |
         sdkmanager "platform-tools" "platforms;android-34" "build-tools;37.0.0"
