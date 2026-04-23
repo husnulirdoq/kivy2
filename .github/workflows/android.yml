@@ -1,4 +1,3 @@
-# Trigger rebuild
 name: Android CI/CD
 
 on:
@@ -10,7 +9,6 @@ env:
   ANDROID_HOME: $HOME/.buildozer/android/platform/android-sdk
   ANDROID_SDK_ROOT: $HOME/.buildozer/android/platform/android-sdk
   PATH: /usr/bin:$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:$PATH
-
 
 jobs:
   build:
@@ -29,8 +27,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y openjdk-17-jdk unzip tar
-        which tar
-        tar --version
         pip install --upgrade pip setuptools wheel cython
         pip install buildozer python-for-android
 
@@ -42,24 +38,14 @@ jobs:
         unzip commandlinetools.zip
         mv cmdline-tools/* .
         rm -rf cmdline-tools
-        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
+        ls -R $ANDROID_SDK_ROOT/cmdline-tools/latest
         which sdkmanager
         sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
 
     - name: Install Android SDK build-tools
       run: |
-        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
         sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
           "platform-tools" "platforms;android-34" "build-tools;37.0.0"
-
-
-    - name: Install Buildozer
-      run: |
-        pip install buildozer
-        pip install python-for-android
-
-    - name: Check tar
-      run: which tar && tar --version
 
     - name: Build APK
       run: |
@@ -88,4 +74,3 @@ jobs:
           --app <1:308895666340:android:7e4b4a92f2ba707fd35631> \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }}
-
