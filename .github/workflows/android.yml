@@ -9,7 +9,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   ANDROID_HOME: $HOME/.buildozer/android/platform/android-sdk
   ANDROID_SDK_ROOT: $HOME/.buildozer/android/platform/android-sdk
-
+  PATH: $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:$PATH
 
 jobs:
   build:
@@ -32,23 +32,19 @@ jobs:
 
     - name: Install Android command-line tools
       run: |
-        mkdir -p $HOME/android-sdk/cmdline-tools
-        cd $HOME/android-sdk/cmdline-tools
+        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
+        cd $ANDROID_SDK_ROOT/cmdline-tools/latest
         curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools.zip -d $HOME/android-sdk/cmdline-tools
-        mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
-        sdkmanager --version
+        unzip commandlinetools.zip
+        mv cmdline-tools/* .
+        rm -rf cmdline-tools
+        sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
 
     - name: Install Android SDK build-tools
       run: |
-        mkdir -p $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest
-        cd $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest
-        curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools.zip
-        export PATH=$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/cmdline-tools/bin:$PATH
-        sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk \
+        sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
           "platform-tools" "platforms;android-34" "build-tools;37.0.0"
+
 
     - name: Install Buildozer
       run: |
