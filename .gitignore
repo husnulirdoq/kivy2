@@ -1,5 +1,6 @@
+venv/
 .buildozer/
 bin/
+*.spec
 __pycache__/
-.gradle/
-*.apk
+.DS_Store
