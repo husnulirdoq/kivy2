@@ -27,8 +27,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk unzip
+        sudo apt-get install -y openjdk-17-jdk unzip tar
         pip install --upgrade pip setuptools wheel cython
+        pip install buildozer python-for-android
 
     - name: Install Android command-line tools
       run: |
