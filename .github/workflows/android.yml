@@ -32,12 +32,11 @@ jobs:
 
     - name: Install Android command-line tools
       run: |
-        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
-        cd $ANDROID_SDK_ROOT/cmdline-tools/latest
+        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+        cd $ANDROID_SDK_ROOT/cmdline-tools
         curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
         unzip commandlinetools.zip
-        mv cmdline-tools/* .
-        rm -rf cmdline-tools
+        mv cmdline-tools latest
         export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
         $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --version
 
