@@ -24,8 +24,6 @@ jobs:
           build-essential \
           git \
           python3-dev \
-          python3-setuptools \
-          python3-pip \
           ffmpeg \
           libsdl2-dev \
           libsdl2-image-dev \
@@ -41,28 +39,18 @@ jobs:
           gstreamer1.0-plugins-good \
           libffi-dev \
           libssl-dev \
-          libbz2-dev \
-          libsqlite3-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libreadline-dev \
-          tk-dev \
-          libgdbm-dev \
-          libdb5.3-dev \
-          libexpat1-dev \
-          liblzma-dev \
-          libnss3-dev \
           autoconf \
           automake \
           libtool \
+          libltdl-dev \
+          autopoint \
           pkg-config \
           cmake \
           m4 \
           openjdk-17-jdk \
           unzip \
           zip \
-          ccache \
-          lld
+          gettext
 
     - name: Install Buildozer & Cython
       run: |
@@ -88,7 +76,13 @@ jobs:
         pip install --upgrade pip setuptools wheel
         pip install "cython<3.0"
         pip install buildozer
-        
+
+    - name: Fix Libtool Path
+      run: |
+        # Memaksa aclocal untuk melihat folder makro sistem
+        export ACLOCAL_PATH=/usr/share/aclocal
+        echo "ACLOCAL_PATH=$ACLOCAL_PATH" >> $GITHUB_ENV
+
     - name: Build APK
       run: |
         buildozer -v android debug
