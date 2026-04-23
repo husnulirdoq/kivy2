@@ -1,12 +1,8 @@
-# Trigger rebuild
 name: Android CI/CD
 
 on:
   push:
     branches: [ "main" ]
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -21,29 +17,50 @@ jobs:
       with:
         python-version: "3.11"
 
-    - name: Install dependencies
+    - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk unzip
-        pip install --upgrade pip setuptools wheel cython
-    - name: Install Android command-line tools
+        sudo apt-get install -y \
+          build-essential \
+          git \
+          ffmpeg \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-mixer-dev \
+          libsdl2-ttf-dev \
+          libportmidi-dev \
+          libswscale-dev \
+          libavformat-dev \
+          libavcodec-dev \
+          zlib1g-dev \
+          libgstreamer1.0-dev \
+          gstreamer1.0-plugins-base \
+          gstreamer1.0-plugins-good \
+          libffi-dev \
+          libssl-dev \
+          autoconf \
+          automake \
+          libtool \
+          pkg-config \
+          cmake \
+          openjdk-17-jdk \
+          unzip \
+          zip
+
+    - name: Install Buildozer & Cython
       run: |
-        mkdir -p $HOME/android-sdk/cmdline-tools
-        cd $HOME/android-sdk/cmdline-tools
-        curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools.zip
-        mv cmdline-tools latest
-        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
-    - name: Install Android SDK build-tools
+        pip install --upgrade pip setuptools wheel
+        pip install "cython<3.0"  # Buildozer sering bermasalah dengan Cython 3.x
+        pip install buildozer
+
+    - name: Build APK with Buildozer
       run: |
-        export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
-        sdkmanager "platform-tools" "platforms;android-34" "build-tools;37.0.0"
-    - name: Install Buildozer
-      run: |
-        pip install buildozer python-for-android
-    - name: Build APK
-      run: |
-        buildozer android debug
+        # Menggunakan 'yes |' untuk menyetujui semua lisensi SDK otomatis
+        yes | buildozer -v android debug
+      env:
+        # Memaksa buildozer menggunakan headless mode jika perlu
+        APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
+
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
@@ -53,10 +70,15 @@ jobs:
   distribute:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout source
       uses: actions/checkout@v4
+      
+    - name: Download APK from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: wellbeing-apk
+        path: bin/
 
     - name: Set up Firebase CLI
       run: curl -sL https://firebase.tools | bash
@@ -64,6 +86,6 @@ jobs:
     - name: Upload to Firebase App Distribution
       run: |
         firebase appdistribution:distribute bin/*.apk \
-          --app <1:308895666340:android:7e4b4a92f2ba707fd35631> \
-          --groups testers \
+          --app "1:308895666340:android:7e4b4a92f2ba707fd35631" \
+          --groups "testers" \
           --token ${{ secrets.FIREBASE_TOKEN }}
