@@ -38,6 +38,9 @@ jobs:
       run: |
         export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
         sdkmanager "platform-tools" "platforms;android-34" "build-tools;37.0.0"
+    - name: Install Buildozer
+      run: |
+        pip install buildozer python-for-android
     - name: Build APK
       run: |
         buildozer android debug
