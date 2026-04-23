@@ -83,12 +83,15 @@ jobs:
         export ACLOCAL_PATH=/usr/share/aclocal
         echo "ACLOCAL_PATH=$ACLOCAL_PATH" >> $GITHUB_ENV
 
-    - name: Build APK
+    - name: Clean and Build APK
       run: |
+        # Menghapus sisa kompilasi yang gagal agar tidak bentrok dengan Cython baru
+        buildozer android clean
+        # Jalankan build dengan verbose agar kita bisa lihat detail jika ada error lagi
         buildozer -v android debug
       env:
-        # Memastikan JAVA_HOME terisi otomatis dari setup-java
-        JAVA_HOME: ${{ env.JAVA_HOME }}
+        APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
+        JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
