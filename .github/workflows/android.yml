@@ -43,6 +43,7 @@ jobs:
           libtool \
           pkg-config \
           cmake \
+          m4 \
           openjdk-17-jdk \
           unzip \
           zip
