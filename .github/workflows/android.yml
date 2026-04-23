@@ -31,10 +31,9 @@ jobs:
         mkdir -p $HOME/android-sdk/cmdline-tools
         cd $HOME/android-sdk/cmdline-tools
         curl -o commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools.zip -d $HOME/android-sdk/cmdline-tools
-        mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
-        sdkmanager --version
+        unzip commandlinetools.zip
+        mv cmdline-tools latest
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --version
     - name: Install Android SDK build-tools
       run: |
         export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
