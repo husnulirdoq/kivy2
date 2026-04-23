@@ -55,11 +55,13 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        # Menggunakan 'yes |' untuk menyetujui semua lisensi SDK otomatis
-        yes | buildozer -v android debug
+        # Kita tidak pakai 'yes |' lagi, tapi pakai flag --profile atau env
+        buildozer -v android debug
       env:
-        # Memaksa buildozer menggunakan headless mode jika perlu
+        # Ini memaksa Buildozer untuk otomatis setuju lisensi tanpa 'yes'
         APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
+        # Memastikan Buildozer menggunakan Java 17 yang sudah di-setup
+        JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
