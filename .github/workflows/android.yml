@@ -114,7 +114,7 @@ jobs:
         # Hapus NDK bawaan GitHub agar Buildozer terpaksa download/pakai versinya sendiri
         sudo rm -rf $ANDROID_NDK_HOME
         sudo rm -rf $ANDROID_NDK_LATEST_HOME
-        
+        export TERM=xterm
         buildozer -v android debug
       env:
         APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
