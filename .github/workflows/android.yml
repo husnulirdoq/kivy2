@@ -24,6 +24,7 @@ jobs:
           build-essential \
           git \
           python3-dev \
+          python3-all-dev \
           ffmpeg \
           libsdl2-dev \
           libsdl2-image-dev \
@@ -39,18 +40,29 @@ jobs:
           gstreamer1.0-plugins-good \
           libffi-dev \
           libssl-dev \
+          libbz2-dev \
+          libsqlite3-dev \
+          liblzma-dev \
+          libncurses5-dev \
+          libncursesw5-dev \
+          libreadline-dev \
+          libdb5.3-dev \
+          libgdbm-dev \
+          libexpat1-dev \
+          libnss3-dev \
+          libltdl-dev \
           autoconf \
           automake \
           libtool \
-          libltdl-dev \
           autopoint \
           pkg-config \
           cmake \
           m4 \
+          gettext \
           openjdk-17-jdk \
           unzip \
           zip \
-          gettext
+          ccache
 
     - name: Install Buildozer & Cython
       run: |
