@@ -63,6 +63,11 @@ jobs:
           unzip \
           zip \
 
+    - name: Install Cython
+      run: |
+        pip install --user Cython==0.29.33
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
     - name: Install Android NDK r25b
       run: |
         mkdir -p $HOME/android-ndk
