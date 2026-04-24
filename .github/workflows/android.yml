@@ -15,7 +15,7 @@ jobs:
         # Ini mobil sewaan kita, semua alat udah lengkap di dalem
         uses: docker://ghcr.io/kivy/buildozer:latest
         with:
-          args: android debug
+          args: --warn_on_root=1 android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
 
