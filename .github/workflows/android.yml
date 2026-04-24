@@ -12,12 +12,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build APK with Buildozer Docker
-        # Ini mobil sewaan kita, semua alat udah lengkap di dalem
         uses: docker://ghcr.io/kivy/buildozer:latest
         with:
-          args: sh -c "yes | buildozer android debug"
+          # Balikin ke perintah standar
+          args: android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
+          # INI KUNCINYA: Kasih identitas user biar dia gak nanya root lagi
+          USER: buildozer
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
