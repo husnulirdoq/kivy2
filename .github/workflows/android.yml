@@ -11,15 +11,15 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer Docker
-        uses: docker://ghcr.io/kivy/buildozer:latest
-        with:
-          # Balikin ke perintah standar
-          args: android debug
-        env:
-          APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
-          # INI KUNCINYA: Kasih identitas user biar dia gak nanya root lagi
-          USER: buildozer
+      - name: Build APK with Docker (Manual Control)
+        run: |
+          # Kita jalankan docker secara manual supaya bisa pakai perintah 'yes'
+          docker run --rm \
+            -v ${{ github.workspace }}:/home/user/hostpython3 \
+            -v ${{ github.workspace }}:/home/user/build \
+            -e APP_ANDROID_ACCEPT_SDK_LICENSE=True \
+            ghcr.io/kivy/buildozer:latest \
+            sh -c "yes | buildozer android debug"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
