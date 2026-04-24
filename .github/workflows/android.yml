@@ -63,6 +63,16 @@ jobs:
           unzip \
           zip \
 
+    - name: Install Android NDK r25b
+      run: |
+        mkdir -p $HOME/android-ndk
+        cd $HOME/android-ndk
+        curl -o ndk.zip https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+        unzip ndk.zip
+        mv android-ndk-r25b ndk
+        echo "ANDROID_NDK_HOME=$HOME/android-ndk/ndk" >> $GITHUB_ENV
+        echo "PATH=$HOME/android-ndk/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+
     - name: Install Buildozer & Cython
       run: |
         pip install --upgrade pip setuptools wheel
