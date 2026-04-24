@@ -62,7 +62,6 @@ jobs:
           openjdk-17-jdk \
           unzip \
           zip \
-          ccache
 
     - name: Install Buildozer & Cython
       run: |
