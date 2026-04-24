@@ -111,21 +111,23 @@ jobs:
 
     - name: Build APK
       run: |
-        # Hapus NDK bawaan GitHub yang sering bikin konflik
+        # 1. Hapus NDK bawaan GitHub yang bikin polusi
         sudo rm -rf $ANDROID_NDK_HOME
         sudo rm -rf $ANDROID_NDK_LATEST_HOME
         
-        # Bersihkan jalur include agar tidak melirik header Linux host
-        unset CPATH
-        unset C_INCLUDE_PATH
-        unset CPLUS_INCLUDE_PATH
+        # 2. Paksa bersihkan variabel yang sering bocor (Clean State)
+        export CPATH=""
+        export C_INCLUDE_PATH=""
+        export CPLUS_INCLUDE_PATH=""
+        export INCLUDE=""
+        
+        # 3. Definisikan TERM agar proses make tenang
         export TERM=xterm
         
+        # 4. Eksekusi Buildozer dengan memaksa environment bersih
         buildozer -v android debug
       env:
         APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
-        # Biarkan Buildozer yang mengatur ini secara internal,
-        # jangan dipaksa kosong di sini karena bisa memicu error 'NDK not found' setelah download.
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
