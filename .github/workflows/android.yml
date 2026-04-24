@@ -85,12 +85,17 @@ jobs:
 
     - name: Build APK
       run: |
-        # Jangan pakai 'buildozer android clean' di sini karena foldernya belum ada
-        # Langsung jalankan build dengan verbose agar log-nya lengkap
+        # Hapus sisa build yang korup
+        rm -rf .buildozer/android/platform/build-arm64-v8a/build/other_builds/kivy
+        
+        # Jalankan build
         buildozer -v android debug
       env:
         APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
         JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
+        # Kosongkan variabel NDK bawaan GitHub agar tidak bentrok
+        ANDROID_NDK_HOME: ""
+        ANDROID_NDK_ROOT: ""
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
