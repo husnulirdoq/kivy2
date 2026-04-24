@@ -1,4 +1,4 @@
-name: Android CI/CD
+name: Android CI/CD Docker
 
 on:
   push:
@@ -7,153 +7,40 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout source
-      uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
+      - name: Build APK with Buildozer Docker
+        # Ini mobil sewaan kita, semua alat udah lengkap di dalem
+        uses: docker://ghcr.io/kivy/buildozer:latest
+        with:
+          args: android debug
+        env:
+          APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          git \
-          python3-dev \
-          python3-all-dev \
-          ffmpeg \
-          libsdl2-dev \
-          libsdl2-image-dev \
-          libsdl2-mixer-dev \
-          libsdl2-ttf-dev \
-          libportmidi-dev \
-          libswscale-dev \
-          libavformat-dev \
-          libavcodec-dev \
-          zlib1g-dev \
-          libgstreamer1.0-dev \
-          gstreamer1.0-plugins-base \
-          gstreamer1.0-plugins-good \
-          libffi-dev \
-          libssl-dev \
-          libbz2-dev \
-          libsqlite3-dev \
-          liblzma-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libreadline-dev \
-          libdb5.3-dev \
-          libgdbm-dev \
-          libexpat1-dev \
-          libnss3-dev \
-          libltdl-dev \
-          autoconf \
-          automake \
-          libtool \
-          autopoint \
-          pkg-config \
-          cmake \
-          m4 \
-          gettext \
-          openjdk-17-jdk \
-          unzip \
-          zip \
-
-    - name: Install Cython
-      run: |
-        pip install --user Cython==0.29.33
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-    - name: Install Android NDK r25b
-      run: |
-        mkdir -p $HOME/android-ndk
-        cd $HOME/android-ndk
-        curl -o ndk.zip https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
-        unzip ndk.zip
-        mv android-ndk-r25b ndk
-        echo "ANDROID_NDK_HOME=$HOME/android-ndk/ndk" >> $GITHUB_ENV
-        echo "PATH=$HOME/android-ndk/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
-
-    - name: Install Buildozer & Cython
-      run: |
-        pip install --upgrade pip setuptools wheel
-        pip install "cython<3.0"  # Buildozer sering bermasalah dengan Cython 3.x
-        pip install buildozer
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Git Configuration
-      run: |
-        # Meningkatkan buffer git untuk menghindari RPC failed / 500 error
-        git config --global http.postBuffer 524288000
-        git config --global http.lowSpeedLimit 0
-        git config --global http.lowSpeedTime 999999
-
-    - name: Upgrade Build Tools
-      run: |
-        pip install --upgrade pip setuptools wheel
-        pip install "cython<3.0"
-        pip install buildozer
-
-    - name: Fix Libtool Path
-      run: |
-        # Memaksa aclocal untuk melihat folder makro sistem
-        export ACLOCAL_PATH=/usr/share/aclocal
-        echo "ACLOCAL_PATH=$ACLOCAL_PATH" >> $GITHUB_ENV
-
-    - name: Build APK
-      run: |
-        # 1. Hapus NDK bawaan GitHub yang bikin polusi
-        sudo rm -rf $ANDROID_NDK_HOME
-        sudo rm -rf $ANDROID_NDK_LATEST_HOME
-        
-        # 2. Paksa bersihkan variabel yang sering bocor (Clean State)
-        export CPATH=""
-        export C_INCLUDE_PATH=""
-        export CPLUS_INCLUDE_PATH=""
-        export INCLUDE=""
-        
-        # 3. Definisikan TERM agar proses make tenang
-        export TERM=xterm
-        
-        # 4. Eksekusi Buildozer dengan memaksa environment bersih
-        buildozer -v android debug
-      env:
-        APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
-
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: wellbeing-apk
-        path: bin/*.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wellbeing-apk
+          path: bin/*.apk
 
   distribute:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout source
-      uses: actions/checkout@v4
-      
-    - name: Download APK from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: wellbeing-apk
-        path: bin/
+      - name: Download APK from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: wellbeing-apk
+          path: bin/
 
-    - name: Set up Firebase CLI
-      run: curl -sL https://firebase.tools | bash
+      - name: Set up Firebase CLI
+        run: curl -sL https://firebase.tools | bash
 
-    - name: Upload to Firebase App Distribution
-      run: |
-        firebase appdistribution:distribute bin/*.apk \
-          --app "1:308895666340:android:7e4b4a92f2ba707fd35631" \
-          --groups "testers" \
-          --token ${{ secrets.FIREBASE_TOKEN }}
+      - name: Upload to Firebase App Distribution
+        run: |
+          firebase appdistribution:distribute bin/*.apk \
+            --app "1:308895666340:android:7e4b4a92f2ba707fd35631" \
+            --groups "testers" \
+            --token ${{ secrets.FIREBASE_TOKEN }}
