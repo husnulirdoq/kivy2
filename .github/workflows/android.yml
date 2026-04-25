@@ -15,7 +15,7 @@ jobs:
         uses: docker://ghcr.io/kivy/buildozer:latest
         with:
           entrypoint: /bin/bash
-          args: -c "cd kivy && echo 'n' | buildozer android debug"
+          args: -c "cd kivy && yes | buildozer android debug"
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
