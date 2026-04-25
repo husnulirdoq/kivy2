@@ -1,8 +1,5 @@
 venv/
 .buildozer/
 bin/
-*.spec
 __pycache__/
-.DS_Storevenv/
-.buildozer/
-bin/
+.DS_Store
