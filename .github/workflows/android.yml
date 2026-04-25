@@ -14,8 +14,8 @@ jobs:
       - name: Build APK with Buildozer Docker
         uses: docker://ghcr.io/kivy/buildozer:latest
         with:
-          entrypoint: /bin/sh
-          args: -c "cd kivy && yes | buildozer android debug"
+          entrypoint: /bin/bash
+          args: -c "cd /github/workspace/kivy && yes | buildozer android debug"
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "True"
 
