@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -11,7 +11,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
-    tasks = relationship("Task", back_populates="owner")
+    tasks = relationship("Task", back_populates="owner", cascade="all, delete-orphan")
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -19,6 +19,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     text = Column(String)
     completed = Column(Boolean, default=False)
+    user_id = Column(Integer, ForeignKey("users.id"))
     firebase_uid = Column(String, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     
